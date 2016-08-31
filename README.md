@@ -1,2 +1,2 @@
 # EDA040
-# Course laborations
+# Course laborationsd
