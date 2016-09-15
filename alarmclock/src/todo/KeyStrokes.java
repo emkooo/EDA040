@@ -1,7 +1,6 @@
 package todo;
 
 import done.ClockInput;
-import done.ClockOutput;
 import se.lth.cs.realtime.semaphore.Semaphore;
 
 public class KeyStrokes implements Runnable {
@@ -18,12 +17,12 @@ public class KeyStrokes implements Runnable {
 		
 			switch(command){
 			// 1 is setAlarm
-			case 1:	System.out.print("1 was pressed and alarmtime is: " +time);
+			case 1:	//System.out.print("1 was pressed and alarmtime is: " +time);
 				sharedData.setAlarmTime(time);
 				break;
 			
 				// 2 is setTime	
-			case 2: System.out.print("2 was pressed and time set is: " +time);
+			case 2: //System.out.print("2 was pressed and time set is: " +time);
 				sharedData.setCurrentTime(time);
 				break;
 						}
@@ -46,7 +45,7 @@ public class KeyStrokes implements Runnable {
 						sharedData.alarmOff();	
 					}
 					command = clockInput.getChoice();
-					System.out.println("Choice is: " +command);
+					//System.out.println("Choice is: " +command);
 					timeInitated = clockInput.getValue();
 					//if(command!=0) {
 					keyPressed(command, timeInitated);
