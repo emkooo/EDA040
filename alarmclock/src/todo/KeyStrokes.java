@@ -30,10 +30,9 @@ public class KeyStrokes implements Runnable {
 		
 	
 	public void run() {
-	//	ClockOutput clockOutput = sharedData.getClockOutput();
+		
 		ClockInput  clockInput = sharedData.getClockInput();
 		int timeInitated;
-		//Boolean alarmFlag;
 		int command = clockInput.getChoice();
 		
 			while(true){
@@ -47,11 +46,8 @@ public class KeyStrokes implements Runnable {
 					command = clockInput.getChoice();
 					//System.out.println("Choice is: " +command);
 					timeInitated = clockInput.getValue();
-					//if(command!=0) {
 					keyPressed(command, timeInitated);
-						//prevCommand = 0;
-					//}
 					
-				}
+					}
 			}
 }

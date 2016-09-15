@@ -3,7 +3,7 @@ package todo;
 import done.ClockInput;
 import done.ClockOutput;
 import se.lth.cs.realtime.semaphore.MutexSem;
-import se.lth.cs.realtime.semaphore.Semaphore;
+//import se.lth.cs.realtime.semaphore.Semaphore;
 
 public class PassiveData {
 	
@@ -12,7 +12,7 @@ public class PassiveData {
 	private ClockOutput clockOutput;
 	private static int currentTime;
 	private boolean alarmIsOn = false;
-	private Semaphore sem;
+	private MutexSem sem;
 	
 	public PassiveData(ClockInput clockInput, ClockOutput clockOutput){
 		this.clockInput = clockInput;
@@ -108,10 +108,13 @@ public class PassiveData {
 	}
 	
 	public int getAlarmTime(){
+		/*
 		sem.take();
-		Integer temp = new Integer(alarmTime);
+		//Integer temp = new Integer(alarmTime);
 		sem.give();
-		return 	temp.intValue();
+		//return 	temp.intValue();
+		 */
+		 return alarmTime;
 	}
 
 }

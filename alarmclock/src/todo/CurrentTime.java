@@ -1,7 +1,5 @@
 package todo;
 
-import se.lth.cs.realtime.semaphore.Semaphore;
-
 public class CurrentTime implements Runnable{
 	
 	private PassiveData sharedData;
@@ -20,7 +18,6 @@ public class CurrentTime implements Runnable{
 			t += 1000;
 			diff = t - System.currentTimeMillis();
 			if(diff > 0)
-				//System.out.print(diff);
 				try {
 					Thread.sleep(diff);
 				} catch (InterruptedException e1) {
@@ -29,7 +26,6 @@ public class CurrentTime implements Runnable{
 				}
 			sharedData.incrementTime(1);
 		}
-		
 	}
 
 }
