@@ -170,7 +170,7 @@ public class ClockGUI extends Applet implements KeyListener, ClockTimeDisplay, I
 			case KeyEvent.VK_SHIFT:
 				b1 = true;
 				break;
-			case KeyEvent.VK_CONTROL:
+			case KeyEvent.VK_ALT: // this is changed to ALT instead of CONTROL (MACBOOK)
 				b2 = true;
 				break;
 			case KeyEvent.VK_LEFT:

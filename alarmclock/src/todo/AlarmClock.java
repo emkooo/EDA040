@@ -21,9 +21,16 @@ public class AlarmClock extends Thread {
 	// below is a simple alarmclock thread that beeps upon 
 	// each keypress. To be modified in the lab.
 	public void run() {
-		while (true) {
-			sem.take();
-			output.doAlarm();
-		}
+	
+		PassiveData sharedData = new PassiveData(input,output);
+		
+		CurrentTime timeThread = new CurrentTime(sharedData);
+		new Thread(timeThread).start();
+		
+		KeyStrokes keyReader = new KeyStrokes(sharedData,sem);
+		new Thread(keyReader).start();
+		
 	}
+	
+
 }

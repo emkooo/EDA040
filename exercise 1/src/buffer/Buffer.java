@@ -26,11 +26,17 @@ class Buffer {
 	}
 
 	String getLine() {
+		avail.take();
+		mutex.take();
+		String temp = new String(buffData);
+		mutex.give();
+		free.give();
+		
 		// Exercise 2 ...
 		// Here you should add code so that if the buffer is empty, the
 		// calling process is delayed until a line becomes available.
 		// A caller of putLine hanging on buffer full should be released.
 		// ...
-		return null;
+		return temp;
 	}
 }
