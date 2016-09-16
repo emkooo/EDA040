@@ -26,7 +26,7 @@ public class AlarmClock extends Thread {
 		CurrentTime timeThread = new CurrentTime(sharedData);
 		new Thread(timeThread).start();
 		
-		KeyStrokes keyReader = new KeyStrokes(sharedData,sem);
+		KeyStrokes keyReader = new KeyStrokes(sharedData,sem,input);
 		new Thread(keyReader).start();
 		
 	}
