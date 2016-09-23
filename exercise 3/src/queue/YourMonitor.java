@@ -68,7 +68,7 @@ class YourMonitor {
 				clerksFree--;
 			} else {
 				i++;
-			}
+			} //
 		}
 		return i;
 	}
