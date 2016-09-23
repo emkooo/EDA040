@@ -3,7 +3,7 @@ package queue;
 class YourMonitor {
 	private int nCounters;
 	
-	private int nextQueueNumber = 0;
+	private int nextQueueNumber = -1;
 	private int highestHandledTicket = 0;
 	private boolean[] countersFree;
 	private int clerksFree = 0;
@@ -11,7 +11,7 @@ class YourMonitor {
 
 	YourMonitor(int n) { 
 		nCounters = n;
-		this.countersFree = new boolean[nCounters]; // initiates all as false
+		this.countersFree = new boolean[nCounters]; // initiates all as busy
 		// Initialize your attributes here...
 	}
 	
@@ -20,14 +20,10 @@ class YourMonitor {
 	 * There is never more than 100 customers waiting.
 	 */
 	synchronized int customerArrived() { 
-		nextQueueNumber++;
-		if(nextQueueNumber== 100){
-			nextQueueNumber = 0;
-			return nextQueueNumber;
-		}
-		return nextQueueNumber-1;
-		// Implement this method...
-	//	return 0;
+		// increment nextTicketNumber
+		nextQueueNumber++;	
+		// one-liner : reset if equals 100, else return nextQueueNumber;
+		return (nextQueueNumber == 100) ? nextQueueNumber = 0 : nextQueueNumber;
 	}
 
 	/**
@@ -37,14 +33,12 @@ class YourMonitor {
 	synchronized void clerkFree(int id) {
 		
 		//check against spam
-		
 		if(!countersFree[id]){			// if not already set as available
 			countersFree[id] = true; 	// set as available
 			clerksFree++;				// condition has changed
-			//System.out.println("clerks free: " +clerksFree);
+			// since a condition has been changed, we have to call notifyAll()
 			notifyAll();				// notify threads in queue
 		}
-		// Implement this method...
 	}
 
 	/**
@@ -53,23 +47,29 @@ class YourMonitor {
 	 * number of the engaged clerk.
 	 */
 	synchronized DispData getDisplayData() throws InterruptedException { 
-		// Implement this method...
 		
-		// do nothing if clarks are busy or there is no one to serve
+		// do nothing if clerks are busy or there is no one to serve
 		while(clerksFree == 0 || nextQueueNumber == highestHandledTicket){
-			wait();
+			wait(); // wait until conditions above are changed
 		}
 		DispData display = new DispData();
-		display.ticket = highestHandledTicket++; 
-		for(int i =0; i < countersFree.length; i++){
-			if(countersFree[i] == true){
-				display.counter = i;
+		display.ticket = highestHandledTicket++;
+		display.counter = FindFreeClerk();
+		return display;
+	}
+	
+	private int FindFreeClerk(){
+		int i = 0;
+		boolean found = false;
+		while(i < countersFree.length && !found){
+			if(countersFree[i]){
+				found = true;
 				countersFree[i] = false;
-				//System.out.println("clerks free: " +clerksFree);
-				clerksFree--;		// we need to decrease when busy
-				break;
+				clerksFree--;
+			} else {
+				i++;
 			}
 		}
-		return display;
+		return i;
 	}
 }
