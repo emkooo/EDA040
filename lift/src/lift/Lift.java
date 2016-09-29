@@ -3,21 +3,19 @@ package lift;
 public class Lift extends Thread{
 
 	ElevatorMonitor elevatorMonitor;
+	private LiftView liftView;
+	int currentFloor = 0;
 	
-	public Lift(ElevatorMonitor elevatorMonitor){
+	public Lift(ElevatorMonitor elevatorMonitor, LiftView liftView){
 		this.elevatorMonitor = elevatorMonitor;
+		this.liftView = liftView;
 	}
 	
 	public void run(){
 		while(true){
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			elevatorMonitor.getSome();
+			int nextFloor = elevatorMonitor.MoveElevatorFrom(currentFloor);		// gets the next floor
+			liftView.moveLift(currentFloor, nextFloor);						// moves to next floor
+			currentFloor = nextFloor;
 		}
-	}
-	
+	}	
 }

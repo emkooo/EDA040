@@ -1,7 +1,5 @@
 package lift;
 
-import java.util.Random;
-
 public class Person extends Thread{
 	
 	ElevatorMonitor elevatorMonitor;
@@ -12,17 +10,11 @@ public class Person extends Thread{
 	
 	public void run(){
 		while(true){
-			int delay = 1000*((int)(Math.random()*46.0));
-			//System.out.print("Time to sleep: " +delay);
-			try {
-				Thread.sleep(delay);
-			} catch (InterruptedException e) {
+			int delay = 1000*((int)(Math.random()*46.0));				// create random delay between (1-45) seconds
+			try {Thread.sleep(delay);} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			elevatorMonitor.PersonCallElevator();
-	
-
+			elevatorMonitor.PersonCallElevator();						// Person has arrived
 		}
 	}
 }
