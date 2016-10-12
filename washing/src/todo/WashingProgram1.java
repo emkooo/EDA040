@@ -19,7 +19,7 @@ import done.*;
  *   <LI>Unlocks the hatch.
  * </UL>
  */
-class WashingProgram3 extends WashingProgram {
+class WashingProgram1 extends WashingProgram {
 
 	// ------------------------------------------------------------- CONSTRUCTOR
 
@@ -30,7 +30,7 @@ class WashingProgram3 extends WashingProgram {
 	 * @param   waterController  The WaterController to use
 	 * @param   spinController   The SpinController to use
 	 */
-	public WashingProgram3(AbstractWashingMachine mach,
+	public WashingProgram1(AbstractWashingMachine mach,
 			double speed,
 			TemperatureController tempController,
 			WaterController waterController,
@@ -46,28 +46,45 @@ class WashingProgram3 extends WashingProgram {
 	 */
 	protected void wash() throws InterruptedException {
 		
-		System.out.print("KOM VI HIT");
-
-		// Switch of temp regulation
-		myTempController.putEvent(new TemperatureEvent(this,
-				TemperatureEvent.TEMP_IDLE,
-				0.0));
-
-		// Switch off spin
-		mySpinController.putEvent(new SpinEvent(this, SpinEvent.SPIN_OFF));
-
-		// Drain
-		myWaterController.putEvent(new WaterEvent(this,
-				WaterEvent.WATER_DRAIN,
-				0.0));
-		mailbox.doFetch(); // Wait for Ack
-
-		// Set water regulation to idle => drain pump stops
-		myWaterController.putEvent(new WaterEvent(this,
-				WaterEvent.WATER_IDLE,
-				0.0));
-
-		// Unlock
+		// Lock the hatch
+		myMachine.setLock(true);
+		
+		// Fill the machine with water
+		myWaterController.putEvent(new WaterEvent(this,WaterEvent.WATER_FILL,10.0));
+		mailbox.doFetch();
+		
+		// Spin slowly 
+		mySpinController.putEvent(new SpinEvent(this,SpinEvent.SPIN_SLOW));
+		
+		// Heat to 60 degree
+		myTempController.putEvent(new TemperatureEvent(this,TemperatureEvent.TEMP_SET,60.0));
+		mailbox.doFetch();
+		
+		// keep temperature for 30 minutes
+		sleep((int) ((30*60*1000)/mySpeed));
+		
+		// Drain water
+		myWaterController.putEvent(new WaterEvent(this,WaterEvent.WATER_DRAIN,0));
+		mailbox.doFetch();
+		
+		// Rinse 5 times
+		for(int i = 0; i < 5; i++){
+			myWaterController.putEvent(new WaterEvent(this,WaterEvent.WATER_FILL,10.0));
+			mailbox.doFetch();
+			// do this for 2 minutes
+			sleep((int) ((2*60*1000)/mySpeed));
+			myWaterController.putEvent(new WaterEvent(this, WaterEvent.WATER_DRAIN,0.0));
+			mailbox.doFetch();
+			
+		}
+		
+		// Centrifuge for 5 minutes
+		myWaterController.putEvent(new SpinEvent(this,SpinEvent.SPIN_FAST));
+		sleep((int) (2*60*1000));
+		myWaterController.putEvent(new SpinEvent(this,SpinEvent.SPIN_OFF));
+		
+		// Unlock hatch
 		myMachine.setLock(false);
+
 	}
 }

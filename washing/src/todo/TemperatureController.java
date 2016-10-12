@@ -13,6 +13,8 @@ public class TemperatureController extends PeriodicThread {
 	}
 
 	public void perform() {
+		
+		mailbox.tryFetch();
 		// TODO: implement this method
 	}
 }

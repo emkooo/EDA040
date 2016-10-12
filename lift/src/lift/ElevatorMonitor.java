@@ -66,7 +66,7 @@ public class ElevatorMonitor {
 		Random randGenerator = new Random();
 		
 		/*
-		 * Randomizes the floor in which people enter
+		 * Randomizes the floor in which people enter & exit
 		 * And makes sure the destFloor != startFloor
 		 */
 		int startFloor = randGenerator.nextInt(7);
