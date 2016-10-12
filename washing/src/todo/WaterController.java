@@ -41,7 +41,7 @@ public class WaterController extends PeriodicThread {
 									theMachine.setFill(false);
 									// Acknowledge right away, we're done with this task
 									((RTThread) message.getSource()).putEvent(new AckEvent(this));
-									break;
+									break; 
 		}
 
 	}
